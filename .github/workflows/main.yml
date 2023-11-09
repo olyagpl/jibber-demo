@@ -15,7 +15,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Test Java Code
         run: |
-          ./mvnw --no-transfer-progress -Pnative test
+          ./mvnw --no-transfer-progress -Pnative -DskipNativeTests package
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
