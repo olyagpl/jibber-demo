@@ -73,25 +73,66 @@
 								<id>build-native</id>
 								<phase>package</phase>
 								<goals>
-									<goal>compile-no-fork</goal>
+									<goal>build</goal>
 								</goals>
 							</execution>
 						</executions>
 						<configuration>
-              						<!-- Change this name to jibber-distroless -->
 							<imageName>jibber</imageName>
 							<buildArgs>
 								<!-- Provide more memory to Native Image -->
-                            					<buildArg>-J-Xmx16G</buildArg>
-                						<!-- Mostly static -->
-								<!-- <buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg> -->
+                            	<buildArg>-J-Xmx16G</buildArg>
 							</buildArgs>
-            					</configuration>
+            			</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<!-- Profile to build a mostly static native executable -->
+		<profile>
+			<id>distroless</id>
+			<properties>
+				<repackage.classifier>exec</repackage.classifier>
+				<!-- Version of Native Build tools to use -->
+				<native-buildtools.version>0.9.28</native-buildtools.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.junit.platform</groupId>
+					<artifactId>junit-platform-launcher</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.graalvm.buildtools</groupId>
+						<artifactId>native-maven-plugin</artifactId>
+						<version>${native-buildtools.version}</version>
+						<extensions>true</extensions>
+						<executions>
+							<execution>
+								<id>build-native</id>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<imageName>jibber-distroless</imageName>
+							<buildArgs>
+								<!-- Provide more memory to Native Image -->
+								<buildArg>-J-Xmx16G</buildArg>
+								<!-- Mostly static -->
+								<buildArg>-H:+StaticExecutableWithDynamicLibC</buildArg>
+								<!-- Quick build mode, for the impatient, or those giving talks -->
+								<!-- <buildArg>-Ob</buildArg> -->
+							</buildArgs>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
 	</profiles>
-
-
 </project>
